@@ -1,18 +1,32 @@
 
-import CircleShip from '@/js/geometric/circle'
-
 /**
- * 绘画类
- */
+*图形绘画类，负责绘画图形的动作。
+* @version  1.0.0
+* @author seanYU
+*/
 export default class DrawTool {
-  constructor (type = null) {
-    this.type = type
+  /**
+   *构造函数
+   * @param {String} type 类型
+   * @param {Object} symbol 样式对象
+   */
+  constructor (type, symbol) {
+    this.type = type// 绘画图形类型
+    this.symbol = symbol // 样式对象
+    this.layer = null// 绑定的图层
+    this.drawgeom = null// 正在绘画的图形对象
   }
+  /**
+   * 图层绑定
+   * @param {Object} layer 对象
+   */
   addTo (layer) {
     this.layer = layer
   }
   /**
-   * 设置类别
+   *设置绘画类别
+   * @param {String} type
+   * @param {Object} symbol
    */
   setCategory (type, symbol) {
     this.type = type
@@ -21,25 +35,31 @@ export default class DrawTool {
     this.layer.canvas.addEventListener('mousedown', this.mouseDownEventBind)
   }
   /**
-   * 创建图形实例
+   * 创建绘画图形实例对象
+   * @param {String} type  图形类型
+   * @param {Object} event  事件监听对象，用于计算位置
+   * @return {Object} circle  图形实例
    */
   creatGeo (type, event) {
-    let param = {
-      geometric: {
-        point: {x: event.layerY, y: event.layerY},
-        radius: 0
-      },
-      symbol: this.symbol
-    }
-    let circle = new CircleShip(param)
-    circle.addTo(this.layer)
-    this.drawgeom = circle
+    // let param = {
+    //   geometric: {
+    //     point: {x: event.layerY, y: event.layerY},
+    //     radius: 0
+    //   },
+    //   symbol: JSON.parse(JSON.stringify(this.symbol))// 深度拷贝，防止对象污染
+    // }
+    // let circle = new CircleShip(param)
+    return circle
   }
   /**
    * 鼠标按下事件响应函数
+   * @param {Object} event  事件回调对象
    */
   mouseDownEvent (event) {
-    this.creatGeo(this.type, event)
+    this.mouseUpEvent()
+    let circle = this.creatGeo(this.type, event)
+    circle.addTo(this.layer)
+    this.drawgeom = circle
     this.startPoint = {x: event.layerX, y: event.layerY}
     this.mouseMoveEventBind = this.mouseMoveEvent.bind(this)
     this.mouseUpeEventBind = this.mouseUpEvent.bind(this)
@@ -47,7 +67,8 @@ export default class DrawTool {
     this.layer.canvas.addEventListener('mouseup', this.mouseUpeEventBind)
   }
   /**
-   * s鼠标移动事件响应函数
+   * 鼠标移动事件响应函数
+   * @param {Object} event  事件回调对象
    */
   mouseMoveEvent (event) {
     this.drawgeom.updataGeom(this.startPoint, event)
@@ -67,5 +88,12 @@ export default class DrawTool {
     this.layer.canvas.removeEventListener('mousemove', this.mouseMoveEventBind)
     this.layer.canvas.removeEventListener('mouseUp', this.mouseUpeEventBind)
     this.layer.canvas.addEventListener('mousedown', this.mouseDownEventBind)
+  }
+  /**
+  * 设置样式
+  * @param {Object} symbol
+  */
+  setSymbol (symbol) {
+    this.symbol = symbol
   }
 }
