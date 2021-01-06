@@ -14,9 +14,9 @@
     <div class="drawtool_row">
       <div class="drawtool_title"> 样式</div>
       <div class="drawtool_shape">
-        <el-color-picker v-model="strokeStyle"
+        <el-color-picker v-model="symbol.strokeStyle"
                          @change="colorChange"></el-color-picker>
-        <el-input-number v-model="lineWidth"
+        <el-input-number v-model="symbol.lineWidth"
                          @change="handleChange"
                          :min="1"
                          :max="10"
@@ -45,8 +45,10 @@ export default {
   data () {
     return {
       layer: {},
-      strokeStyle: '#409EFF',
-      lineWidth: 2,
+      symbol: {
+        lineWidth: 2,
+        strokeStyle: '#409EFF'
+      },
       edit: false,
       drawtool: {}
     }
@@ -56,26 +58,32 @@ export default {
     this.drawtool = new DrawTool()
     this.drawtool.addTo(this.layer)
   },
+  watch: {
+    symbol: {
+      handler: function (symbol) {
+        this.drawtool.setSymbol(symbol)
+      },
+      deep: true
+    }
+  },
   methods: {
     drawCircle () {
-      let symbol = {
-        lineWidth: this.lineWidth,
-        strokeStyle: this.strokeStyle
-      }
-      this.drawtool.setCategory('circle', symbol)
+      this.drawtool.setCategory('circle', this.symbol)
     },
+
     /**
      * 颜色改变
+     * @param {number} num
+     * @return {void}
      */
     colorChange (value) {
-      this.strokeStyle = value
+      this.symbol.strokeStyle = value
     },
     /**
      * 画笔粗细
      */
     handleChange (val) {
-      debugger
-      this.lineWidth = val
+      this.symbol.lineWidth = val
     }
   }
 }

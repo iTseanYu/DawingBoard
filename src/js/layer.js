@@ -1,7 +1,8 @@
-/* eslint-disable no-unused-vars */
 /**
- * 图层类
- */
+*图层类
+* @version  1.0.0
+* @author seanYU
+*/
 export default class Layer {
   constructor (canvasid = undefined) {
     this.canvas = undefined
@@ -15,11 +16,17 @@ export default class Layer {
       console.error('请输入正确的dom元素id')
     }
   }
-
+  /**
+ *图层绘画
+ * @param {Object} geom 图形对象
+ */
   draw (geom) {
     this.geom.push(geom)
     this.reDraw()
   }
+  /**
+   * 图层重绘
+   */
   reDraw () {
     this.geom.forEach(geom => {
       geom.draw(this.canvas)

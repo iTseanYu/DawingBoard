@@ -1,20 +1,21 @@
 
 import geometric from './geometric.js'
 /**
-*圆类
+*矩形类
 * @version  1.0.0
 * @author seanYU
 */
-export default class circle extends geometric {
+export default class rectangle extends geometric {
   /**
    * 构造函数
    * @param {Object} obj 图形构造对象参数
-   * @example {geometric：point:{x:0,y:0},radius:10},symbol:{lineWidth:2,strokeStyle:'black'}}   */
+   * @example {geometric：point:{x:0,y:0},width:10,height:20},symbol:{lineWidth:2,strokeStyle:'black'}}   */
   constructor (obj) {
     super()
     this.point = obj.geometric.point
-    this.centerpoint = obj.geometric.point
-    this.radius = obj.geometric.radius
+    this.width = obj.geometric.width
+    this.height = obj.geometric.height
+    this.centerpoint = {x: this.point.x + this.width / 2, y: this.point.x + this.height / 2}
     this.symbol = obj.symbol === undefined ? this.symbol : obj.symbol
   }
 
@@ -28,7 +29,7 @@ export default class circle extends geometric {
     ctx.beginPath()
     ctx.lineWidth = this.symbol.lineWidth
     ctx.strokeStyle = this.symbol.strokeStyle
-    ctx.arc(this.point.x, this.point.y, this.radius, 0, Math.PI * 2, false)
+    ctx.rect(this.point.x, this.point.y, this.width, this.height)
     ctx.stroke()
   }
   /**
@@ -40,6 +41,7 @@ export default class circle extends geometric {
     let ctx = this.canvas.getContext('2d')
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     this.point = startPoint
-    this.radius = Math.sqrt(Math.pow(event.layerX - startPoint.x, 2) + Math.pow(event.layerY - startPoint.y, 2))
+    this.width = event.layerX - startPoint.x
+    this.height = event.layerY - startPoint.y
   }
 }

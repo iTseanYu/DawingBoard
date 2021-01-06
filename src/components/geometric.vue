@@ -4,7 +4,7 @@
 </template>
 
 <script>
-// import { ss } from './shape.js'
+
 export default {
   name: 'geometric',
   data () {
