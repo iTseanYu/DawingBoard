@@ -1,4 +1,4 @@
-
+import CircleShip from '@/js/geometric/circle'
 /**
 *图形绘画类，负责绘画图形的动作。
 * @version  1.0.0
@@ -41,14 +41,14 @@ export default class DrawTool {
    * @return {Object} circle  图形实例
    */
   creatGeo (type, event) {
-    // let param = {
-    //   geometric: {
-    //     point: {x: event.layerY, y: event.layerY},
-    //     radius: 0
-    //   },
-    //   symbol: JSON.parse(JSON.stringify(this.symbol))// 深度拷贝，防止对象污染
-    // }
-    // let circle = new CircleShip(param)
+    let param = {
+      geometric: {
+        point: {x: event.layerY, y: event.layerY},
+        radius: 0
+      },
+      symbol: JSON.parse(JSON.stringify(this.symbol))// 深度拷贝，防止对象污染
+    }
+    let circle = new CircleShip(param)
     return circle
   }
   /**
