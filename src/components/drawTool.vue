@@ -5,10 +5,12 @@
       <div class="drawtool_shape">
         <el-button class="iconfont iconweibiaoti38"
                    @click="drawCircle"></el-button>
-        <el-button class="iconfont iconxiantiao-line"></el-button>
+        <el-button class="iconfont iconxiantiao-line"
+                   @click="drawLine"></el-button>
         <el-button class="iconfont iconjuxing"
                    @click="drawRectangle"></el-button>
-        <el-button class="iconfont icontx-zhengfangxing"></el-button>
+        <el-button class="iconfont icontuoyuanxing"
+                   @click="drawEllipse"></el-button>
       </div>
     </div>
 
@@ -74,7 +76,12 @@ export default {
     drawRectangle () {
       this.drawtool.setCategory('rectangle', this.symbol)
     },
-
+    drawEllipse () {
+      this.drawtool.setCategory('ellipse', this.symbol)
+    },
+    drawLine () {
+      this.drawtool.setCategory('line', this.symbol)
+    },
     /**
      * 颜色改变
      * @param {number} num

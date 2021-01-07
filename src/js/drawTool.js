@@ -1,5 +1,7 @@
 import CircleShip from '@/js/geometric/circle'
 import RectangleShip from '@/js/geometric/rectangle'
+import EllipseShip from '@/js/geometric/ellipse'
+import LineShip from '@/js/geometric/line'
 /**
 *图形绘画类，负责绘画图形的动作。
 * @version  1.0.0
@@ -65,6 +67,26 @@ export default class DrawTool {
           symbol: JSON.parse(JSON.stringify(this.symbol))// 深度拷贝，防止对象污染
         }
         geom = new RectangleShip(param)
+        break
+      case 'ellipse':
+        param = {
+          geometric: {
+            point: {x: event.layerY, y: event.layerY},
+            width: 0,
+            height: 0
+          },
+          symbol: JSON.parse(JSON.stringify(this.symbol))// 深度拷贝，防止对象污染
+        }
+        geom = new EllipseShip(param)
+        break
+      case 'line':
+        param = {
+          geometric: {
+            points: [{x: event.layerX, y: event.layerY}]
+          },
+          symbol: JSON.parse(JSON.stringify(this.symbol))// 深度拷贝，防止对象污染
+        }
+        geom = new LineShip(param)
         break
     }
 
