@@ -6,7 +6,8 @@
         <el-button class="iconfont iconweibiaoti38"
                    @click="drawCircle"></el-button>
         <el-button class="iconfont iconxiantiao-line"></el-button>
-        <el-button class="iconfont iconjuxing"></el-button>
+        <el-button class="iconfont iconjuxing"
+                   @click="drawRectangle"></el-button>
         <el-button class="iconfont icontx-zhengfangxing"></el-button>
       </div>
     </div>
@@ -69,6 +70,9 @@ export default {
   methods: {
     drawCircle () {
       this.drawtool.setCategory('circle', this.symbol)
+    },
+    drawRectangle () {
+      this.drawtool.setCategory('rectangle', this.symbol)
     },
 
     /**
