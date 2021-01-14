@@ -34,6 +34,7 @@ export default class DrawTool {
   setCategory (type, symbol) {
     this.type = type
     this.symbol = symbol
+    this.clearDraw()
     this.mouseDownEventBind = this.mouseDownEvent.bind(this)
     this.layer.canvas.addEventListener('mousedown', this.mouseDownEventBind)
   }
@@ -128,7 +129,7 @@ export default class DrawTool {
   clearDraw () {
     this.layer.canvas.removeEventListener('mousemove', this.mouseMoveEventBind)
     this.layer.canvas.removeEventListener('mouseUp', this.mouseUpeEventBind)
-    this.layer.canvas.addEventListener('mousedown', this.mouseDownEventBind)
+    this.layer.canvas.removeEventListener('mousedown', this.mouseDownEventBind)
   }
   /**
   * 设置样式
@@ -136,5 +137,8 @@ export default class DrawTool {
   */
   setSymbol (symbol) {
     this.symbol = symbol
+  }
+  closeDraw () {
+    this.clearDraw()
   }
 }

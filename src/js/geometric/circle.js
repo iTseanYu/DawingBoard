@@ -42,4 +42,15 @@ export default class circle extends geometric {
     this.point = startPoint
     this.radius = Math.sqrt(Math.pow(event.layerX - startPoint.x, 2) + Math.pow(event.layerY - startPoint.y, 2))
   }
+  /*
+ * 返回最小矩形范围坐标
+ * @return {Array}  [leftup, leftdown, rightdown, rightup]
+ */
+  getextent () {
+    const leftup = {x: this.point.x - this.radius, y: this.point.y - this.radius}
+    const leftdown = {x: this.point.x - this.radius, y: this.point.y + this.radius}
+    const rightdown = {x: this.point.x + this.radius, y: this.point.y + this.radius}
+    const rightup = {x: this.point.x + this.radius, y: this.point.y - this.radius}
+    return [leftup, leftdown, rightdown, rightup]
+  }
 }

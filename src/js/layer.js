@@ -12,6 +12,7 @@ export default class Layer {
       this.canvas.width = this.canvas.offsetWidth
       this.canvas.height = this.canvas.offsetHeight
       this.geom = []
+      this._event = {} // 事件回调函数队列
     } else {
       console.error('请输入正确的dom元素id')
     }
@@ -31,5 +32,49 @@ export default class Layer {
     this.geom.forEach(geom => {
       geom.draw(this.canvas)
     })
+  }
+  /**
+   *
+   * @param {String} type 事件名称
+   * @param {Function} callback  回调函数
+   * [{type:'geo',callback:function()}]
+   */
+  on (type, callback, categories = 'layer', geom = null) {
+    if (!this._event[type]) {
+      this._event[type] = [{categories: categories, callback: callback, type: type, geom: geom}]
+      this.eventCallbackBind = this.eventCallback.bind(this)
+      this.canvas.addEventListener([type], this.eventCallbackBind)
+    } else {
+      this._event[type].push({categories: categories, callback: callback, type: type, geom: geom})
+    }
+  }
+  /**
+   *
+   * @param {String} type 事件名称
+   * @param {Function} callback  回调函数
+   */
+  off (type, callback) {
+    if (this._event[type] === undefined || this._event[type].length === 0) {
+      return false
+    } else {
+      this._event[type].forEach((e, index) => {
+        if (e.callback === callback) {
+          this._event[type].splice(index, 1)
+        }
+      })
+    }
+  }
+  /**
+   *事件回调函数
+   * @param {Object} event 事件对象
+   */
+  eventCallback (event) {
+    for (let i = 0; i < this._event[event.type].length; i++) {
+      if (this._event[event.type][i].categories === 'geom') {
+        this._event[event.type][i].geom.isPointInPath(event.layerX, event.layerY) && this._event[event.type][i].callback()
+      } else {
+        this._event[event.type][i].callback()
+      }
+    }
   }
 }
