@@ -2,6 +2,8 @@ import CircleShip from '@/js/geometric/circle'
 import RectangleShip from '@/js/geometric/rectangle'
 import EllipseShip from '@/js/geometric/ellipse'
 import LineShip from '@/js/geometric/line'
+import PolygonShip from '@/js/geometric/polygon'
+
 /**
 *图形绘画类，负责绘画图形的动作。
 * @version  1.0.0
@@ -89,6 +91,15 @@ export default class DrawTool {
         }
         geom = new LineShip(param)
         break
+      case 'polygon':
+        param = {
+          geometric: {
+            points: [{x: event.layerX, y: event.layerY}, {x: event.layerX, y: event.layerY}]
+          },
+          symbol: JSON.parse(JSON.stringify(this.symbol))// 深度拷贝，防止对象污染
+        }
+        geom = new PolygonShip(param)
+        break
     }
 
     return geom
@@ -103,17 +114,46 @@ export default class DrawTool {
     circle.addTo(this.layer)
     this.drawgeom = circle
     this.startPoint = {x: event.layerX, y: event.layerY}
-    this.mouseMoveEventBind = this.mouseMoveEvent.bind(this)
-    this.mouseUpeEventBind = this.mouseUpEvent.bind(this)
-    this.layer.canvas.addEventListener('mousemove', this.mouseMoveEventBind)
-    this.layer.canvas.addEventListener('mouseup', this.mouseUpeEventBind)
+    // 多边形的绘画机制不同
+    if (this.drawgeom.type === 'polygon') {
+      this.mouseMoveEventBind = this.mouseMoveEvent.bind(this)
+      this.layer.canvas.addEventListener('mousemove', this.mouseMoveEventBind)
+      this.clickEventBind = this.clickEvent.bind(this)
+      this.layer.canvas.addEventListener('click', this.clickEventBind)
+      this.layer.canvas.removeEventListener('mousedown', this.mouseDownEventBind)
+    } else {
+      this.mouseMoveEventBind = this.mouseMoveEvent.bind(this)
+      this.mouseUpeEventBind = this.mouseUpEvent.bind(this)
+      this.layer.canvas.addEventListener('mousemove', this.mouseMoveEventBind)
+      this.layer.canvas.addEventListener('mouseup', this.mouseUpeEventBind)
+    }
+  }
+  /**
+   * 多边形绘画点击事件回调
+   * @param {Object} event
+   */
+  clickEvent (event) {
+    this.drawgeom.appendPoint({x: event.layerX, y: event.layerY})
+    this.dbClickEventtBind = this.dbClickEvent.bind(this)
+    this.layer.canvas.addEventListener('dblclick', this.dbClickEventtBind)
+  }
+  /**
+   * 多边形绘画双击结束事件回调
+   *
+   */
+  dbClickEvent () {
+    this.layer.canvas.removeEventListener('click', this.clickEventBind)
+    this.layer.canvas.removeEventListener('dblclick', this.dbClickEventtBind)
+    this.layer.canvas.removeEventListener('mousemove', this.mouseMoveEventBind)
+    // 重新开始绘画
+    this.setCategory(this.type, this.symbol)
   }
   /**
    * 鼠标移动事件响应函数
    * @param {Object} event  事件回调对象
    */
   mouseMoveEvent (event) {
-    this.drawgeom.updataGeom(this.startPoint, event)
+    this.drawgeom._updataGeom(this.startPoint, event)
     this.layer.reDraw()
   }
   /**
@@ -130,6 +170,8 @@ export default class DrawTool {
     this.layer.canvas.removeEventListener('mousemove', this.mouseMoveEventBind)
     this.layer.canvas.removeEventListener('mouseUp', this.mouseUpeEventBind)
     this.layer.canvas.removeEventListener('mousedown', this.mouseDownEventBind)
+    this.layer.canvas.removeEventListener('click', this.clickEventBind)
+    this.layer.canvas.removeEventListener('dblclick', this.dbClickEventtBind)
   }
   /**
   * 设置样式

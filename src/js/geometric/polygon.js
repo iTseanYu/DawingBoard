@@ -1,20 +1,20 @@
 
 import geometric from './geometric.js'
 /**
-*线类
+*多边形类
 * @version  1.0.0
 * @author seanYU
 */
-export default class line extends geometric {
+export default class polygon extends geometric {
   /**
    * 构造函数
    * @param {Object} obj 图形构造对象参数
-   * @example {geometric：points:[{x:0,y:0}]},symbol:{lineWidth:2,strokeStyle:'black'}}   */
+   * @example {geometric：points:[{x:0,y:0}],symbol:{lineWidth:2,strokeStyle:'black'}}   */
   constructor (obj) {
     super()
     this.points = obj.geometric.points
-    // this.centerpoint
-
+    this.type = 'polygon'
+    // this.centerpoint = obj.geometric.point
     this.symbol = obj.symbol === undefined ? this.symbol : obj.symbol
   }
 
@@ -33,7 +33,7 @@ export default class line extends geometric {
     this.points.forEach(element => {
       ctx.lineTo(element.x, element.y)
     })
-
+    ctx.lineTo(this.points[0].x, this.points[0].y)
     ctx.stroke()
     ctx.closePath()
   }
@@ -45,6 +45,21 @@ export default class line extends geometric {
   _updataGeom (startPoint, event) {
     let ctx = this.canvas.getContext('2d')
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    this.points.push({x: event.layerX, y: event.layerY})
+    this.points[this.points.length - 1] = {x: event.layerX, y: event.layerY}
+  }
+  /**
+   * 追加一个点
+   * @param {Object} point
+   */
+  appendPoint (point) {
+    this.points.push(point)
+    this.draw(this.canvas)
+  }
+  /*
+ * 返回最小矩形范围坐标
+ * @return {Array}  [leftup, leftdown, rightdown, rightup]
+ */
+  getextent () {
+
   }
 }

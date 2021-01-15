@@ -37,7 +37,7 @@ export default class geometric {
    * @param {Object} startPoint 绘画开始起点
    * @param {Object} event 事件回调对象
    */
-  updataGeom (startPoint, event) {
+  _updataGeom (startPoint, event) {
     this.point = startPoint
   }
   /*

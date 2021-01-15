@@ -37,7 +37,7 @@ export default class rectangle extends geometric {
    * @param {Object} startPoint 绘画起点
    * @param {Object} event 事件对象
    */
-  updataGeom (startPoint, event) {
+  _updataGeom (startPoint, event) {
     let ctx = this.canvas.getContext('2d')
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     this.point = startPoint

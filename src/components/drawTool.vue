@@ -11,6 +11,8 @@
                    @click="drawRectangle"></el-button>
         <el-button class="iconfont icontuoyuanxing"
                    @click="drawEllipse"></el-button>
+        <el-button class="iconfont icontuoyuanxing"
+                   @click="drawPolygon"></el-button>
       </div>
     </div>
 
@@ -29,23 +31,13 @@
     <div class="drawtool_row">
       <div class="drawtool_title">开启绘画 </div>
       <div class="drawtool_shape">
-        <el-switch v-model="edit"
-                   @change="changeEdit"
-                   active-color="#13ce66"
-                   inactive-color="#ff4949">
-        </el-switch>
         <el-button @click="closeDraw">取消绘画</el-button>
       </div>
     </div>
     <div class="drawtool_row">
       <div class="drawtool_title">添加事件 </div>
       <div class="drawtool_shape">
-        <el-switch v-model="draw"
-                   @change="changeDraw"
-                   active-color="#13ce66"
-                   inactive-color="#ff4949">
-        </el-switch>
-        <el-button @click="butclick">取消事件</el-button>
+
       </div>
     </div>
   </div>
@@ -96,6 +88,9 @@ export default {
     drawLine () {
       this.drawtool.setCategory('line', this.symbol)
     },
+    drawPolygon () {
+      this.drawtool.setCategory('polygon', this.symbol)
+    },
     /**
      * 颜色改变
      * @param {number} num
@@ -110,22 +105,9 @@ export default {
     handleChange (val) {
       this.symbol.lineWidth = val
     },
-    changeEdit () {
-      // this.drawtool.drawgeom.canvas.addEventListener('mousedown', (event) => {
-      //   console.log(this.drawtool.drawgeom.isPointInPath(event.layerX, event.layerY))
-      // })
-    },
-    changeDraw () {
-      this.drawtool.drawgeom.on('click', this.aa)
-    },
-    butclick () {
-      this.drawtool.drawgeom.off('click', this.aa)
-    },
     closeDraw () {
       this.drawtool.closeDraw()
-    },
-    aa () { console.log('aa') }
-
+    }
   }
 }
 </script>
