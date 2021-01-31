@@ -28,8 +28,8 @@ module.exports = {
     path: config.build.assetsRoot,
     filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+      ? "/DawingBoard"
+      : "/"
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
